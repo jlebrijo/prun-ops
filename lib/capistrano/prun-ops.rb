@@ -1,0 +1,1 @@
+Dir.glob("#{File.dirname(__FILE__)}/*.rake").each { |r| load r }

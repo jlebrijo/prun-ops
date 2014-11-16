@@ -1,15 +1,16 @@
 # PrunOps
 
-Covers all Operations in a Ruby on Rails Application server:
+Covers all Deployment and maintainance Operations in a Ruby on Rails Application server:
 
-1. PROVISION: Create hosts and ship them with Docker containers.
-1. CONFIGURATION: Build Chef cookbooks and configure/re-configure your servers. Based on [PRUN-CFG cookbook](https://supermarket.getchef.com/cookbooks/prun-cfg).
 1. DEPLOYMENT: Capistrano tasks to depoly your rails Apps.
 1. DIAGNOSIS: Capistrano diagnosis tools to guet your Apps status on real time.
 1. RELEASE: Rake tasks to manage and tag version number in your Apps (X.Y.Z).
 1. BACKUP: Backup policy for database and files in your Apps, using git as storage.
 
-Based on [PRUN docker image](https://registry.hub.docker.com/u/jlebrijo/prun/).
+Based on:
+
+* [PRUN Docker image](https://registry.hub.docker.com/u/jlebrijo/prun/).
+* [PRUN Chef recipe](https://github.com/jlebrijo/prun-cfg).
 
 ## Installation
 
@@ -27,130 +28,9 @@ Or install it yourself as:
 
     $ gem install prun-ops
 
-## Usage: Provision with OPS command
-
-OPS command is focused to cover first Provision configurations for a the Operations of your infrastructure.
-
-You can create an infrastructure project (like me [/ops](https://github.com/jlebrijo/ops)) 
-
-```
-mkdir ops && cd ops
-rbenv local 2.1.2
-git init
-```
-
-Create a Gemfile:
-
-```
-source 'https://rubygems.org'
-
-gem 'prun-ops'
-
-# OPTIONAL: Add next gems if you want to integrate with Chef as Configuration management tecnology
-gem 'knife-solo'
-gem 'librarian-chef'
-gem 'foodcritic'
-```
-
-And: `bundle install`
-
-To avoid `bundle exec` repfix: `bundle install --binstubs .bundle/bin`
-
-Or integrate it within your Chef infrastructure project. Just add the gem to your Gemfile.
-
-### Folder Structure
-
-TODO: `ops init` to create this structure
-
-Structure:
-
-```
-ops
-  providers
-    digitalocean.yml
-  hosts
-    example.com.yml
-  containers
-    example.com.yml
-```
-
-#### Provider file syntax
-
-TODO: Create more providers (aws, linode, gcloud, ...)
-
-For a Digital Ocean provider create a file (ops/providers/digitalocean.yml) with your account API key:
-
-```yml
-token: a206ae60dda6bxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxcf0cbf41
-```
-
-#### Host file syntax
-
-For a Digital Ocean host we can make the following file (ops/hosts/example.com.yml):
-
-```yml
-user: core   # User to connect the host
-# Values to configure DigitalOcean machine
-size:     1gb
-region:   ams3
-image:    coreos-stable
-ssh_keys:
-  - e7:51:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:88:57
-```
-
-And create the host: `ops create host example.com`
-
-### Containers file syntax
-
-In this file we can configure all containers to run in the host provided in the name:
-
-```yml
-www:
-  image: jlebrijo/prun
-  ports:
-    - '2222:22'
-    - '80:80'
-#  command: /bin/bash
-
-# OPTIONS: use the long name of the options, 'detach' instead of '-d'
-  detach: true
-#  interactive: true
-#  memory: 8g
-#  cpuset: 0-7
-
-# POST-CONDITIONS: execute after build the container:
-  post-conditions:
-    - sshpass -p 'J3mw?$_6' ssh-copy-id -o 'StrictHostKeyChecking no' -i ~/.ssh/id_rsa.pub root@lebrijo.com -p 2222
-    - ssh root@lebrijo.com -p 2222 "echo 'root:K8rt$_?1' | chpasswd"
-
-# here you can create other containers
-# db:
-#   image: ubuntu/postgresql
-```
-
-Create containers at host: `ops ship host example.com`
-
-### Commands
-
-Create/delete domain names, create/delete hosts and ship/unship hosts:
-
-* `ops create host HOST_NAME` create the host defined by the name of the file in the 'ops/hosts' folder.
-* `ops delete host HOST_NAME`
-* `ops create domain DOMAIN_NAME [IP_ADDRESS]` create a domain to be managed by DigitalOcean.
-* `ops delete domain DOMAIN_NAME [IP_ADDRESS]`
-* `ops ship host HOST_NAME` run the containers in the host.
-* `ops unship host HOST_NAME`
-
-### TODO: Configuration with Chef
-
-Configuration with chef commands
-
-* `ops configure host HOST_NAME`: configure with chef all containers in host. Here you need to install knife-solo gem.
-    * knife solo cook [container_user]@[container_dns_name] -p [container_ssh_port]
-
 ## Usage: Day-to-day rake and capistrano tasks
 
-Add the gem to the Gemfile in your Rails Application.
+### Configure Capistrano
 
 `gem "capistrano-rails"` is included as prun-ops requirement. Create basic files `cap install`
 
@@ -163,15 +43,11 @@ require 'capistrano/rails'
 require 'capistrano/bundler'
 require 'capistrano/rails/assets'
 require 'capistrano/rails/migrations'
+require 'capistrano/prun-ops'
 Dir.glob('lib/capistrano/tasks/*.rake').each { |r| import r }
 ```
 
-Add to your config/deploy.rb this:
-
-```ruby
-## PRUN-OPS configuration
-require 'prun-ops/cap/all'
-```
+Notice that you are adding all prun-ops tasks with the line `require 'capistrano/prun-ops'`
 
 Your config/deploy/production.rb:
 
@@ -196,8 +72,8 @@ Backups/restore database and files in your Rails app.
 Configure your 'config/deploy.rb':
 
 ```ruby
-# Backup directories
-set :backup_dirs, %w{public/uploads}
+    # Backup directories
+    set :backup_dirs, %w{public/uploads}
 ```
 
 And your 'config/applciation.rb':
@@ -213,6 +89,7 @@ And your 'config/applciation.rb':
 ![backup schema](https://docs.google.com/drawings/d/1Sp8ysn46ldIWRxaLUHfzpu7vK0zMjh4_iMpEP1U6SuU/pub?w=642&h=277  "Backup commands schema")
 
 * `cap [stg] pull:data`: downloads DDBB and file folders from the stage you need.
+* `cap [stg] backup[TAG]`: Commit a backup of DDBB and files to the git repo configured. "application-YYYYMMDD" tagged if no tag is provided.
 * `cap [stg] backup:restore[TAG]`: Restore the last backup into the stage indicated, or tagged state if TAG is provided.
 * `rake backup |TAG|`: Uploads backup to git store from local, tagging with date, or with TAG if provided. Useful to backup production stage.
 * `rake backup:restore |TAG|`: Restore last backup copy, or tagged with TAG if provided.
@@ -221,12 +98,12 @@ And your 'config/applciation.rb':
 
 Release management
 
-* `rake release[VERSION]` push forward from dev-branch to master-branch and tag the commit with VERSION name.
-* `rake release:delete[VERSION]` remove tag with VERSION name.
+* `rake release |VERSION|` push forward from dev-branch to master-branch and tag the commit with VERSION name.
+* `rake release:delete |VERSION|` remove tag with VERSION name.
+* `rake git:ff` merge dev branch towards master branch without releasing (Deprecating, new version "rake tomaster[message]")
 
-![Release management](https://docs.google.com/drawings/d/1IEWCIhDFqREVVjSwM9bPfVpyNm3jIoNF4Xn8y-dZHTg/pub?w=871&h=431  "Release management")
+![Release management](https://docs.google.com/drawings/d/1PLIQ8SMagUo1438RNShl99Ux3daFutmRgIsbQqhJ2n4/pub?w=917&h=551  "Release management")
 
-* `rake git:ff` merge dev branch towards master branch without releasing
 
 ### Diagnosis
 
@@ -237,6 +114,11 @@ Some capistrano commands useful to connect to server and help with the problem s
 * `cap [stg] c` open a rails console with server
 * `cap [stg] x[COMMAND]` execute any command in server provided as COMMAND (i.e.: cap production x['free -m'])
 
+### Monitoring
+
+Recommend to configure your Rails server with [PRUN Chef recipe](https://github.com/jlebrijo/prun-cfg).
+
+At this moment we are implementing [NewRelic](http://newrelic.com/) monitoring, including as dependency ['newrelic_rpm'](https://github.com/newrelic/rpm) gem. To configure yourproject you just need to create an account at [NewRelic](http://newrelic.com/)  and follow the instructions (creating a 'config/newrelic.yml file with your license_key).
 
 ## Contributing
 
@@ -277,3 +159,8 @@ Some capistrano commands useful to connect to server and help with the problem s
 ### v0.0.9
 
 * Fixing Capistrano pulling tasks "pull:data"
+
+### v0.0.10
+
+* Removing bin/ops command in order to create open-dock gem
+* Remove prun-ops dependency from 'config/deployment.rb' file and ad it to 'Capfile' as `require 'capistrano/prun-ops'`
