@@ -35,7 +35,7 @@ namespace :git do
     on roles(:app) do
       within "/var/www/common" do
         execute :git, :pull, :origin, :master
-      end if test("[ -f /var/www/common ]")
+      end if test("[ -d /var/www/common ]")
     end
   end
 
