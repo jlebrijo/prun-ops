@@ -52,7 +52,7 @@ Notice that you are adding all prun-ops tasks with the line `require 'capistrano
 Your config/deploy/production.rb:
 
 ```
-server "example.com", user: 'root', roles: %w{web app}, port: 2222
+server "example.com", user: 'root', roles: %w{web app db}, port: 2222
 ```
 
 Note: Remember change this line in production.rb file: `config.assets.compile = true`
@@ -69,23 +69,25 @@ Note: Remember change this line in production.rb file: `config.assets.compile = 
 
 Backups/restore database and files in your Rails app.
 
-Configure your 'config/deploy.rb':
+Configure your 'config/applciation.rb':
+
+```ruby
+  # Backup directories
+  config.backup_dirs = %w{public/ckeditor_assets public/system}
+
+  # Backup repo
+  config.backup_repo = "git@github.com:example/backup.git"
+```
+
+And your 'config/deploy.rb':
 
 ```ruby
     # Backup directories
-    set :backup_dirs, %w{public/uploads}
+    require_relative "./application.rb"
+    set :backup_dirs, Taskboard::Application.config.backup_dirs
 ```
 
-And your 'config/applciation.rb':
-
-```ruby
-    # Backup directories
-    config.backup_dirs = %w{public/ckeditor_assets public/system}
-
-    # Backup repo
-    config.backup_repo = "git@github.com:example/backup.git"
-```
-
+And
 ![backup schema](https://docs.google.com/drawings/d/1Sp8ysn46ldIWRxaLUHfzpu7vK0zMjh4_iMpEP1U6SuU/pub?w=642&h=277  "Backup commands schema")
 
 * `cap [stg] pull:data`: downloads DDBB and file folders from the stage you need.
