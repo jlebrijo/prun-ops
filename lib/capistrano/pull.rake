@@ -29,6 +29,7 @@ namespace :pull do
         debug ":   Pulling Files from #{fetch(:stage)} ..."
         if fetch(:backup_dirs).any?
           fetch(:backup_dirs).each do |dir|
+            execute "rm -r #{dir}"
             execute "scp -r -P #{host.port} #{host.user}@#{host.hostname}:#{current_path}/#{dir} #{dir}"
           end
         else
