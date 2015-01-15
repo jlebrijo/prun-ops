@@ -28,16 +28,3 @@ namespace :db do
     end
   end
 end
-
-namespace :git do
-  desc 'Git pull for common code project'
-  task :pull_common do
-    on roles(:app) do
-      within "/var/www/common" do
-        execute :git, :pull, :origin, :master
-      end if test("[ -d /var/www/common ]")
-    end
-  end
-
-  after "deploy:updating", "git:pull_common"
-end

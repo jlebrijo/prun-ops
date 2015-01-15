@@ -64,6 +64,16 @@ Note: Remember change this line in production.rb file: `config.assets.compile = 
 * `cap [stg] deploy:stop` stop thin server
 * `cap [stg] deploy:start` start thin server
 * `cap [stg] db:setup` load schema and seeds for first DB setup
+* `cap [stg] git:remove_repo` Removes repo (useful when repo_url changes)
+
+Added the possibility of deploying from local repository. Add to `deploy.rb` or `[stg].rb` files:
+
+```
+before :deploy, "git:deploy_from_local_repo"
+```
+
+Take care to remove the previous repo if you are changing the :repo_url : `cap [stg] git:remove_repo`
+
 
 ### Backup
 
