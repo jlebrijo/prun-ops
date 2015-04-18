@@ -1,4 +1,10 @@
-set :backup_dirs, []
+
+require_relative "./application.rb"
+if Rails.application.config.respond_to? :backup_dirs
+  set :backup_dirs, Rails.application.config.backup_dirs
+else
+  set :backup_dirs, []
+end
 
 namespace :deploy do
 

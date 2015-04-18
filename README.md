@@ -89,14 +89,6 @@ Configure your 'config/applciation.rb':
   config.backup_repo = "git@github.com:example/backup.git"
 ```
 
-And your 'config/deploy.rb':
-
-```ruby
-    # Backup directories
-    require_relative "./application.rb"
-    set :backup_dirs, Taskboard::Application.config.backup_dirs
-```
-
 And
 ![backup schema](https://docs.google.com/drawings/d/1Sp8ysn46ldIWRxaLUHfzpu7vK0zMjh4_iMpEP1U6SuU/pub?w=642&h=277  "Backup commands schema")
 
@@ -176,3 +168,13 @@ At this moment we are implementing [NewRelic](http://newrelic.com/) monitoring, 
 
 * Removing bin/ops command in order to create open-dock gem
 * Remove prun-ops dependency from 'config/deployment.rb' file and ad it to 'Capfile' as `require 'capistrano/prun-ops'`
+
+### v0.0.21
+
+* Remove from your 'config/deploy.rb':
+
+```ruby
+    # Backup directories
+    require_relative "./application.rb"
+    set :backup_dirs, Taskboard::Application.config.backup_dirs
+```
