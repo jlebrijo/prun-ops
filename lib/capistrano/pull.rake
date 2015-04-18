@@ -10,7 +10,7 @@ namespace :pull do
     on roles(:app) do |host|
       debug ":   Pulling database from #{fetch(:stage)} ..."
       within "#{current_path}/tmp" do
-        with rails_env: :production do
+        with rails_env: fetch(:stage) do
           rake "db:backup"
         end
       end
