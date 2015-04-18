@@ -43,6 +43,7 @@ require 'capistrano/rails'
 require 'capistrano/bundler'
 require 'capistrano/rails/assets'
 require 'capistrano/rails/migrations'
+require "#{File.dirname(__FILE__)}/config/application"
 require 'capistrano/prun-ops'
 Dir.glob('lib/capistrano/tasks/*.rake').each { |r| import r }
 ```
@@ -177,4 +178,14 @@ At this moment we are implementing [NewRelic](http://newrelic.com/) monitoring, 
     # Backup directories
     require_relative "./application.rb"
     set :backup_dirs, Taskboard::Application.config.backup_dirs
+```
+
+Also add in your Capfile:
+
+```ruby
+................
+require 'capistrano/rails/migrations'
+require "#{File.dirname(__FILE__)}/config/application"
+require 'capistrano/prun-ops'
+................
 ```
