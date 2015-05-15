@@ -60,11 +60,12 @@ Note: Remember change this line in production.rb file: `config.assets.compile = 
 
 ### Deployment
 
+* `cap [stg] deploy:cold` first time deployment with schema:load and seeds (replacing db:migrate)
 * `cap [stg] deploy` deploy your app as usual
 * `cap [stg] deploy:restart` restart thin server of this application
 * `cap [stg] deploy:stop` stop thin server
 * `cap [stg] deploy:start` start thin server
-* `cap [stg] db:setup` load schema and seeds for first DB setup
+* `cap [stg] deploy:db_reset` load schema and seeds for first DB setup
 * `cap [stg] git:remove_repo` Removes repo (useful when repo_url changes)
 
 Added the possibility of deploying from local repository. Add to `deploy.rb` or `[stg].rb` files:
@@ -115,7 +116,7 @@ Release management
 Some capistrano commands useful to connect to server and help with the problem solving.
 
 * `cap [stg] ssh` open a ssh connection with server
-* `cap [stg] log[LOG_FILENAME]` tail rails log by default, or other if LOG_FILENAME is provided
+* `cap [stg] log[LOG_FILENAME]` tail all rails logs by default, or only one if LOG_FILENAME is provided
 * `cap [stg] c` open a rails console with server
 * `cap [stg] x[COMMAND]` execute any command in server provided as COMMAND (i.e.: cap production x['free -m'])
 

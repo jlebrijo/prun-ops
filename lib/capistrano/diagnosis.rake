@@ -19,7 +19,7 @@ end
 desc 'Tails the environment log or the log passed as argument: cap log[thin.3000.log]'
 task :log, :file do |task, args|
   on roles(:app) do
-    file = args[:file]? args[:file] : "#{fetch(:stage)}.log"
+    file = args[:file]? args[:file] : "*"
     execute "tail -f #{shared_path}/log/#{file}"
   end
 end
@@ -34,5 +34,5 @@ task :x, :command do |task, args|
 end
 
 def run_in(host, cmd)
-  exec "ssh #{host.user}@#{host.hostname} -p #{host.port} -tt '#{cmd}'"
+  exec "ssh #{host.user}@#{host.hostname} -p #{host.port || '22'} -tt '#{cmd}'"
 end
