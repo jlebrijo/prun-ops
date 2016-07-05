@@ -10,7 +10,7 @@ namespace :db do
 
   desc "Backup the database tp tmp/db.sql file"
   task backup: :get_db_config do
-    sh "export PGPASSWORD=#{@password} && pg_dump #{@database} -U #{@username} -f #{@default_filename}"
+    sh "export PGPASSWORD=#{@password} && pg_dump #{@database} --host #{@host} -U #{@username} -f #{@default_filename}"
   end
 
   desc "Restore the database from tmp/db.sql file if no one is passed"
@@ -21,6 +21,7 @@ end
 
 task :get_db_config do
   config   = Rails.configuration.database_configuration
+  @host = config[Rails.env]["host"]
   @database = config[Rails.env]["database"]
   @username = config[Rails.env]["username"]
   @password = config[Rails.env]["password"]

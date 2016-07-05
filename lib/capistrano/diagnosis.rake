@@ -16,6 +16,15 @@ task :c do
   end
 end
 
+desc 'Opens a remote Database console'
+task :dbconsole do
+  on roles(:app) do |host|
+    run_locally do
+      run_in host, "cd #{current_path} && RAILS_ENV=#{fetch(:stage)} bundle exec rails dbconsole --include-password"
+    end
+  end
+end
+
 desc 'Tails the environment log or the log passed as argument: cap log[thin.3000.log]'
 task :log, :file do |task, args|
   on roles(:app) do

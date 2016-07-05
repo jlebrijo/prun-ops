@@ -119,6 +119,7 @@ Some capistrano commands useful to connect to server and help with the problem s
 * `cap [stg] ssh` open a ssh connection with server
 * `cap [stg] log[LOG_FILENAME]` tail all rails logs by default, or only one if LOG_FILENAME is provided
 * `cap [stg] c` open a rails console with server
+* `cap [stg] dbconsole` open a rails database console with server
 * `cap [stg] x[COMMAND]` execute any command in server provided as COMMAND (i.e.: cap production x['free -m'])
 
 ### Monitoring
@@ -191,3 +192,7 @@ require "#{File.dirname(__FILE__)}/config/application"
 require 'capistrano/prun-ops'
 ................
 ```
+
+### v0.1.2
+
+* Add `cap stage dbconsole` to open a database console.
