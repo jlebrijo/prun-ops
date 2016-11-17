@@ -11,7 +11,7 @@ namespace :deploy do
     desc "#{action.capitalize} application"
     task :"#{action}" do
       on roles(:app) do
-        execute "service #{fetch :application} #{action}"
+        execute "sudo service #{fetch :application} #{action}"
       end
     end
   end
