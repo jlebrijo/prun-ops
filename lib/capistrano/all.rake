@@ -33,12 +33,21 @@ namespace :deploy do
     invoke 'deploy:finished'
   end
 
+  desc 'Create database'
+  task :db_create do
+    on roles(:db) do
+      within release_path do
+        with rails_env: fetch(:stage) do
+          execute :rake, 'db:create'
+        end
+      end
+    end
+  end
   desc 'Setup database'
   task :db_reset do
     on roles(:db) do
       within release_path do
         with rails_env: fetch(:stage) do
-          execute :rake, 'db:create'
           execute :rake, 'db:schema:load'
           execute :rake, 'db:seed'
         end

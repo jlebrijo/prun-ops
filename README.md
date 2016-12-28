@@ -65,6 +65,7 @@ Note: Remember change this line in production.rb file: `config.assets.compile = 
 * `cap [stg] deploy:restart` restart thin server of this application
 * `cap [stg] deploy:stop` stop thin server
 * `cap [stg] deploy:start` start thin server
+* `cap [stg] deploy:db_create` create database
 * `cap [stg] deploy:db_reset` load schema and seeds for first DB setup
 * `cap [stg] deploy:db_seed` seeds the database
 * `cap [stg] git:remove_repo` Removes repo (useful when repo_url changes)
