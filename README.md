@@ -122,12 +122,30 @@ Some capistrano commands useful to connect to server and help with the problem s
 * `cap [stg] c` open a rails console with server
 * `cap [stg] dbconsole` open a rails database console with server
 * `cap [stg] x[COMMAND]` execute any command in server provided as COMMAND (i.e.: cap production x['free -m'])
+* `cap [stg] rake[TASK]` execute any rake task in server provided as TASK (i.e.: cap production rake[db:version])
 
 ### Monitoring
 
 Recommend to configure your Rails server with [PRUN Chef recipe](https://github.com/jlebrijo/prun-cfg).
 
 At this moment we are implementing [NewRelic](http://newrelic.com/) monitoring, including as dependency ['newrelic_rpm'](https://github.com/newrelic/rpm) gem. To configure yourproject you just need to create an account at [NewRelic](http://newrelic.com/)  and follow the instructions (creating a 'config/newrelic.yml file with your license_key).
+
+### TODO: Configuration management
+
+`configure.yml`: for variables with environment dependency
+
+`cap [stg] configure`
+`cap [stg] configure:base`: for packages, git, time ...
+`cap [stg] configure:ruby`: ruby version
+`cap [stg] configure:pgsql`
+`cap [stg] configure:nginx`
+`cap [stg] configure:node`
+
+`cap [stg] configure:newrelic`
+`cap [stg] configure:jenkins`
+`cap [stg] configure:wordpress`
+
+
 
 ## Contributing
 
@@ -197,3 +215,7 @@ require 'capistrano/prun-ops'
 ### v0.1.2
 
 * Add `cap stage dbconsole` to open a database console.
+
+### v0.1.6
+
+* Add `cap stage rake[db:create]` to execute a rake task in remote server.

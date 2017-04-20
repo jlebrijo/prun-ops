@@ -42,6 +42,18 @@ task :x, :command do |task, args|
   end
 end
 
+desc 'Executes a rake task in server. i.e.: cap staging rake[db:version]'
+task :rake, :remote_task do |task, args|
+  on roles(:app) do
+    within release_path do
+      with rails_env: fetch(:stage) do
+        execute :rake, "#{args[:remote_task]}"
+      end
+    end
+  end
+end
+
+
 def run_in(host, cmd)
   exec "ssh #{host.user}@#{host.hostname} -p #{host.port || '22'} -tt '#{cmd}'"
 end
