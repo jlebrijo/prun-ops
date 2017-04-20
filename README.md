@@ -97,6 +97,8 @@ And
 ![backup schema](https://docs.google.com/drawings/d/1Sp8ysn46ldIWRxaLUHfzpu7vK0zMjh4_iMpEP1U6SuU/pub?w=642&h=277  "Backup commands schema")
 
 * `cap [stg] pull:data`: downloads DDBB and file folders from the stage you need.
+* `cap [stg] pull:db`: Hot backup, download and restore of the stage database
+* `cap [stg] pull:files`: Hot restore of backup_files
 * `cap [stg] backup[TAG]`: Commit a backup of DDBB and files to the git repo configured. "application-YYYYMMDD" tagged if no tag is provided.
 * `cap [stg] backup:restore[TAG]`: Restore the last backup into the stage indicated, or tagged state if TAG is provided.
 * `rake backup |TAG|`: Uploads backup to git store from local, tagging with date, or with TAG if provided. Useful to backup production stage.
