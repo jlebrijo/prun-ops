@@ -25,11 +25,18 @@ task :dbconsole do
   end
 end
 
-desc 'Tails the environment log or the log passed as argument: cap log[thin.3000.log]'
-task :log, :file do |task, args|
+desc 'Tails the environment log or the log passed as argument: cap log_tail[thin.3000.log]'
+task :log_tail, :file do |task, args|
   on roles(:app) do
     file = args[:file]? args[:file] : "*"
-    execute "tail -f #{shared_path}/log/#{file}"
+    execute "tail -f #{shared_path}/log/#{file} | grep -vE \"(^\s*$|asset|Render)\""
+  end
+end
+
+desc 'Search for a pattern in logs'
+task :log_pattern, :pattern do |task, args|
+  on roles(:app) do
+    execute "less #{shared_path}/log/* | grep -A 10 -B 5 '#{args[:pattern]}'"
   end
 end
 
