@@ -36,7 +36,7 @@ end
 desc 'Search for a pattern in logs'
 task :log_pattern, :pattern do |task, args|
   on roles(:app) do
-    execute "less #{shared_path}/log/* | grep -A 10 -B 5 '#{args[:pattern]}'"
+    execute "cat #{shared_path}/log/* | grep -A 10 -B 5 '#{args[:pattern]}'"
   end
 end
 
