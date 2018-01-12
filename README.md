@@ -2,15 +2,11 @@
 
 Covers all Deployment and maintainance Operations in a Ruby on Rails Application server:
 
-1. DEPLOYMENT: Capistrano tasks to depoly your rails Apps.
+1. CONFIGURATION: Capistrano tasks to configure servers.
+1. DEPLOYMENT: Capistrano tasks to deploy your rails Apps.
 1. DIAGNOSIS: Capistrano diagnosis tools to guet your Apps status on real time.
 1. RELEASE: Rake tasks to manage and tag version number in your Apps (X.Y.Z).
 1. BACKUP: Backup policy for database and files in your Apps, using git as storage.
-
-Based on:
-
-* [PRUN Docker image](https://registry.hub.docker.com/u/jlebrijo/prun/).
-* [PRUN Chef recipe](https://github.com/jlebrijo/prun-cfg).
 
 ## Installation
 
@@ -58,9 +54,32 @@ server "example.com", user: 'root', roles: %w{web app db}, port: 2222
 
 Note: Remember change this line in production.rb file: `config.assets.compile = true`
 
+### Configuration
+
+Main task is `cap [stg] config`
+
+Secondary tasks: 
+
+* `cap [stg] ubuntu:install` initial ubuntu dependencies
+* `cap [stg] ruby:install` install ruby on .ruby-version version
+* `cap [stg] rails:prepare` install rails dependencies
+* `cap [stg] postgres:install` install and configure postgres
+* `cap [stg] postgres:[start|stop|restart]` start/stop postgres
+* `cap [stg] nginx:install` install and configure nginx
+* `cap [stg] nginx:[start|stop|restart]` start/stop nginx
+* `cap [stg] nodejs:install` install node
+* `cap [stg] app:prepare` create init scripts
+* `cap [stg] app:db_prepare` database first load
+* `cap [stg] nginx:cert` create SSL certificates with [Let's Encrypt](https://letsencrypt.org/)
+* `cap [stg] nginx:ssl` configure nginx with SSL certificates
+
 ### Deployment
 
-* `cap [stg] deploy:cold` first time deployment with schema:load and seeds (replacing db:migrate)
+Main task is `cap [stg] deploy`
+
+Secondary tasks: 
+
+* `cap [stg] deploy:upload_linked_files` uploads configuration files defined as linked_files
 * `cap [stg] deploy` deploy your app as usual
 * `cap [stg] deploy:restart` restart thin server of this application
 * `cap [stg] deploy:stop` stop thin server
@@ -128,8 +147,6 @@ Some capistrano commands useful to connect to server and help with the problem s
 * `cap [stg] rake[TASK]` execute any rake task in server provided as TASK (i.e.: cap production rake[db:version])
 
 ### Monitoring
-
-Recommend to configure your Rails server with [PRUN Chef recipe](https://github.com/jlebrijo/prun-cfg).
 
 At this moment we are implementing [NewRelic](http://newrelic.com/) monitoring, including as dependency ['newrelic_rpm'](https://github.com/newrelic/rpm) gem. To configure yourproject you just need to create an account at [NewRelic](http://newrelic.com/)  and follow the instructions (creating a 'config/newrelic.yml file with your license_key).
 
@@ -222,3 +239,7 @@ require 'capistrano/prun-ops'
 ### v0.1.6
 
 * Add `cap stage rake[db:create]` to execute a rake task in remote server.
+
+### v0.2.0
+
+* Configuration tasks: Add `cap stage config` and other tasks.

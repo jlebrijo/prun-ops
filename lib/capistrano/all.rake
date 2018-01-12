@@ -16,22 +16,18 @@ namespace :deploy do
     end
   end
 
-  after :publishing, :restart
-
-  desc 'Deploy app for first time'
-  task :cold do
-    invoke 'deploy:starting'
-    invoke 'deploy:started'
-    invoke 'deploy:updating'
-    invoke 'bundler:install'
-    invoke 'deploy:db_reset' # This replaces deploy:migrations
-    invoke 'deploy:compile_assets'
-    invoke 'deploy:normalize_assets'
-    invoke 'deploy:publishing'
-    invoke 'deploy:published'
-    invoke 'deploy:finishing'
-    invoke 'deploy:finished'
+  task :upload_linked_files do
+    on roles :app do
+      shared = "/var/www/#{fetch :application}/shared"
+      fetch(:linked_files).each do |f|
+        execute "mkdir -p #{shared}/#{File.dirname f}"
+        upload! f, "#{shared}/#{f}"
+      end
+    end
   end
+
+  after :publishing, :upload_linked_files
+  after :publishing, :restart
 
   desc 'Create database'
   task :db_create do
