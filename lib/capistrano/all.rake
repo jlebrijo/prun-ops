@@ -22,7 +22,7 @@ namespace :deploy do
       fetch(:linked_files).each do |f|
         execute "mkdir -p #{shared}/#{File.dirname f}"
         upload! f, "#{shared}/#{f}"
-      end
+      end if fetch(:linked_files)
     end
   end
 
