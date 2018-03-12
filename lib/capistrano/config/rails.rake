@@ -1,6 +1,6 @@
 namespace :rails do
   task :prepare do
-    on roles :app do
+    on roles :all do
       execute <<-EOBLOCK
         echo gem: --no-ri --no-rdoc > /root/.gemrc
         gem install bundler

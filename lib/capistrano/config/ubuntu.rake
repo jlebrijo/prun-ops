@@ -1,6 +1,6 @@
 namespace :ubuntu do
   task :install do
-    on roles :app do
+    on roles :all do
       execute 'apt-get -y update'
       # Pre-requirements
       execute <<-EOBLOCK

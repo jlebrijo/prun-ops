@@ -7,5 +7,5 @@ task :config do
   invoke 'nodejs:install'
   invoke 'app:prepare'
   invoke 'deploy:upload_linked_files'
-  invoke 'app:db_prepare'
+  # invoke 'app:db_prepare'
 end
