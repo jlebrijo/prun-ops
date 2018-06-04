@@ -1,14 +1,14 @@
 namespace :ubuntu do
   task :install do
     on roles :all do
-      execute 'apt-get -y update'
+      execute 'sudo apt-get -y update'
       # Pre-requirements
       execute <<-EOBLOCK
-        apt-get install -y git build-essential libsqlite3-dev libssl-dev gawk g++ vim
-        apt-get install -y libreadline6-dev libyaml-dev sqlite3 autoconf libgdbm-dev
-        apt-get install -y libcurl3 libcurl3-gnutls libcurl4-openssl-dev 
-        apt-get install -y libncurses5-dev automake libtool bison pkg-config libffi-dev
-        apt-get install -y software-properties-common
+        sudo apt-get install -y git build-essential libsqlite3-dev libssl-dev gawk g++ vim
+        sudo apt-get install -y libreadline6-dev libyaml-dev sqlite3 autoconf libgdbm-dev
+        sudo apt-get install -y libcurl3 libcurl3-gnutls libcurl4-openssl-dev 
+        sudo apt-get install -y libncurses5-dev automake libtool bison pkg-config libffi-dev
+        sudo apt-get install -y software-properties-common
       EOBLOCK
     end
   end

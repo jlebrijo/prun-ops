@@ -4,7 +4,7 @@ namespace :ruby do
     on roles :all do
       execute <<-EOBLOCK
         sudo apt-add-repository -y ppa:brightbox/ruby-ng
-        apt-get update
+        sudo apt-get update
         sudo apt-get install -y ruby#{ruby_version} ruby#{ruby_version}-dev
       EOBLOCK
     end

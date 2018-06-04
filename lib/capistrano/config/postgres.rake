@@ -5,13 +5,14 @@ namespace :postgres do
     version = config[stage]["version"]
     username = config[stage]["username"]
     password = config[stage]["password"]
+    database = config[stage]["database"]
 
     on roles :all do
       execute <<-EOBLOCK
           sudo add-apt-repository "deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main"
           wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
           sudo apt-get update
-          export LANGUAGE=en_US.UTF-8
+          sudo export LANGUAGE=en_US.UTF-8
           sudo apt-get -y install postgresql-client-#{version} libpq-dev
       EOBLOCK
     end
@@ -32,6 +33,9 @@ namespace :postgres do
       ## Rewrite postgres password:
       execute <<-EOBLOCK
         sudo -u postgres psql -c "ALTER USER #{username} WITH PASSWORD '#{password}';"
+      EOBLOCK
+      execute <<-EOBLOCK
+        sudo -u postgres psql -c "create database #{database};"
       EOBLOCK
 
       invoke 'postgres:restart'

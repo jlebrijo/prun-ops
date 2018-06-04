@@ -15,7 +15,8 @@ namespace :db do
 
   desc "Restore the database from tmp/db.sql file if no one is passed"
   task restore: [:drop, :create, :get_db_config] do
-    sh "export PGPASSWORD=#{@password} && psql -d #{@database} -U #{@username} -h #{@host} < #{filename}"
+    sh "export PGPASSWORD=#{@password} && psql -d #{@database} -U #{@username} -h #{@host} < #{filenamrake
+    e}"
   end
 end
 
