@@ -39,7 +39,9 @@ namespace :pull do
           download! '/tmp/db.sql', 'tmp/db.sql'
         end
         run_locally do
-          execute 'rails db:environment:set RAILS_ENV=development'
+          begin # Don't raise error if rails version < 5
+            execute 'rails db:environment:set RAILS_ENV=development'
+          rescue;end
           rake 'db:restore'
         end
       end
