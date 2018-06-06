@@ -39,7 +39,7 @@ namespace :pull do
           download! '/tmp/db.sql', 'tmp/db.sql'
         end
         run_locally do
-          execute 'rails db:environment:set RAILS_ENV=development'
+          # execute 'rails db:environment:set RAILS_ENV=development'
           rake 'db:restore'
         end
       end
