@@ -3,7 +3,12 @@ Dir.glob("#{File.dirname(__FILE__)}/config/*.rake").each { |r| load r }
 
 ## Common libraries
 def template(template_name, target_path)
-  file = File.read("#{File.dirname(__FILE__)}/config/templates/#{template_name}.erb")
+  begin
+    file = File.read("#{File.dirname(__FILE__)}/config/templates/#{template_name}.erb")
+  rescue
+    file = File.read("lib/capistrano/config/templates/#{template_name}.erb")
+  end
+
   template = ERB.new file, nil, "%"
   rendered = template.result(binding)
   tmp_file = "/tmp/#{SecureRandom.hex}.#{template_name}"
