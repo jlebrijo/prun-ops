@@ -1,5 +1,5 @@
 
-if Rails.application.config.respond_to? :backup_dirs
+if defined?(Rails) && Rails.application.config.respond_to?(:backup_dirs)
   set :backup_dirs, Rails.application.config.backup_dirs
 else
   set :backup_dirs, []
