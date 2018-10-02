@@ -16,3 +16,10 @@ def template(template_name, target_path)
   execute "sudo cp #{tmp_file} #{target_path}"
   execute  "rm #{tmp_file}"
 end
+
+## Bastion config
+def bastion(host, user:)
+  require 'net/ssh/proxy/command'
+  ssh_command = "ssh -W %h:%p -o StrictHostKeyChecking=no #{user}@#{host}"
+  set :ssh_options, proxy: Net::SSH::Proxy::Command.new(ssh_command)
+end

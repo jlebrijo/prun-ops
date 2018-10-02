@@ -54,6 +54,12 @@ server "example.com", user: 'root', roles: %w{web app db}, port: 2222
 
 Note: Remember change this line in production.rb file: `config.assets.compile = true`
 
+If you are accessing your server through a bastion you can define it:
+
+```
+bastion 'bastion.example.com', user: 'user'
+```
+
 ### Configuration
 
 Main task is `cap [stg] config`
@@ -243,3 +249,7 @@ require 'capistrano/prun-ops'
 ### v0.2.0
 
 * Configuration tasks: Add `cap stage config` and other tasks.
+
+### v0.2.8
+
+* Bastion command

@@ -61,6 +61,12 @@ task :rake, :remote_task do |task, args|
 end
 
 
-def run_in(host, cmd)
-  exec "ssh #{host.user}@#{host.hostname} -p #{host.port || '22'} -tt '#{cmd}'"
+def run_in(host, remote_cmd)
+  cmd = %w[ssh]
+  opts = fetch(:ssh_options)
+  cmd << "-oProxyCommand='#{opts[:proxy].command_line_template}'" if opts
+  cmd << "#{host.user}@#{host.hostname}"
+  cmd << "-p #{host.port || '22'}"
+  cmd << "-tt '#{remote_cmd}'"
+  exec cmd.join(' ')
 end
