@@ -68,5 +68,8 @@ def run_in(host, remote_cmd)
   cmd << "#{host.user}@#{host.hostname}"
   cmd << "-p #{host.port || '22'}"
   cmd << "-tt '#{remote_cmd}'"
-  exec cmd.join(' ')
+
+  command = cmd.join(' ')
+  Rails.logger.info command
+  exec command
 end
