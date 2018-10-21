@@ -60,6 +60,15 @@ task :rake, :remote_task do |task, args|
   end
 end
 
+desc 'Uploads a file to /tmp folder. i.e.: cap staging scp[tmp/db.sql]'
+task :scp, :file_path do |task, args|
+  on roles(:app) do |host|
+    run_locally do
+      scp host, args[:file_path]
+    end
+  end
+end
+
 
 def run_in(host, remote_cmd)
   cmd = %w[ssh]
@@ -73,3 +82,16 @@ def run_in(host, remote_cmd)
   Rails.logger.info command
   exec command
 end
+
+def scp(host, file_path)
+  cmd = %w[scp]
+  opts = fetch(:ssh_options)
+  cmd << "-oProxyCommand='#{opts[:proxy].command_line_template}'" if opts
+  cmd << file_path
+  cmd << "#{host.user}@#{host.hostname}:/tmp"
+
+  command = cmd.join(' ')
+  Rails.logger.info command
+  exec command
+end
+
