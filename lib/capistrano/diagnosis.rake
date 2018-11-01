@@ -60,11 +60,20 @@ task :rake, :remote_task do |task, args|
   end
 end
 
-desc 'Uploads a file to /tmp folder. i.e.: cap staging scp[tmp/db.sql]'
-task :scp, :file_path do |task, args|
+desc 'Uploads a file to /tmp folder. i.e.: cap staging upload[tmp/db.sql]'
+task :upload, :file_path do |task, args|
   on roles(:app) do |host|
     run_locally do
-      scp host, args[:file_path]
+      upload_scp host, args[:file_path]
+    end
+  end
+end
+
+desc 'Downloads a file. i.e.: cap staging download[/tmp/db.sql]'
+task :download, :file_path do |task, args|
+  on roles(:app) do |host|
+    run_locally do
+      download_scp host, args[:file_path]
     end
   end
 end
@@ -83,12 +92,24 @@ def run_in(host, remote_cmd)
   exec command
 end
 
-def scp(host, file_path)
+def upload_scp(host, file_path)
   cmd = %w[scp]
   opts = fetch(:ssh_options)
   cmd << "-oProxyCommand='#{opts[:proxy].command_line_template}'" if opts
   cmd << file_path
   cmd << "#{host.user}@#{host.hostname}:/tmp"
+
+  command = cmd.join(' ')
+  Rails.logger.info command
+  exec command
+end
+
+def download_scp(host, file_path)
+  cmd = %w[scp]
+  opts = fetch(:ssh_options)
+  cmd << "-oProxyCommand='#{opts[:proxy].command_line_template}'" if opts
+  cmd << "#{host.user}@#{host.hostname}:#{file_path}"
+  cmd << '.'
 
   command = cmd.join(' ')
   Rails.logger.info command
