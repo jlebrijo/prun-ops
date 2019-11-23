@@ -95,6 +95,7 @@ end
 def upload_scp(host, file_path)
   cmd = %w[scp]
   opts = fetch(:ssh_options)
+  cmd << "-r"
   cmd << "-oProxyCommand='#{opts[:proxy].command_line_template}'" if opts
   cmd << file_path
   cmd << "#{host.user}@#{host.hostname}:/tmp"
