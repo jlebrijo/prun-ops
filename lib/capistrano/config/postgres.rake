@@ -9,7 +9,7 @@ namespace :postgres do
 
     on roles :all do
       execute <<-EOBLOCK
-          sudo add-apt-repository "deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main"
+          sudo add-apt-repository "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main"
           wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
           sudo apt-get update
           sudo export LANGUAGE=en_US.UTF-8
