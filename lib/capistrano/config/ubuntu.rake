@@ -6,7 +6,7 @@ namespace :ubuntu do
       execute <<-EOBLOCK
         sudo apt-get install -y git build-essential libsqlite3-dev libssl-dev gawk g++ vim
         sudo apt-get install -y libreadline6-dev libyaml-dev sqlite3 autoconf libgdbm-dev
-        sudo apt-get install -y libcurl3 libcurl3-gnutls libcurl4-openssl-dev 
+        sudo apt-get install -y libcurl4 libcurl3-gnutls libcurl4-openssl-dev 
         sudo apt-get install -y libncurses5-dev automake libtool bison pkg-config libffi-dev
         sudo apt-get install -y software-properties-common
       EOBLOCK
