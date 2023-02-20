@@ -17,11 +17,13 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_development_dependency "bundler", "~> 1.6"
-  spec.add_development_dependency "rake", "~> 10.0"
+  spec.add_development_dependency "bundler"
+  spec.add_development_dependency "rake"
 
-  spec.add_runtime_dependency 'capistrano', '~> 3.8'
+  spec.add_runtime_dependency 'capistrano'
   spec.add_runtime_dependency 'capistrano-rails'
+  spec.add_runtime_dependency 'capistrano-rvm'
+  spec.add_runtime_dependency 'capistrano3-puma'
   spec.add_runtime_dependency 'thin'
   spec.add_runtime_dependency 'newrelic_rpm'
 end

@@ -27,14 +27,14 @@ namespace :deploy do
   end
 
   after :publishing, :upload_linked_files
-  after :publishing, :restart
+  # after :publishing, :restart
 
   desc 'Create database'
   task :db_create do
     on roles(:db) do
       within release_path do
         with rails_env: fetch(:stage) do
-          execute :rake, 'db:create'
+          execute :rails, 'db:create'
         end
       end
     end
@@ -44,7 +44,7 @@ namespace :deploy do
     on roles(:db) do
       within release_path do
         with rails_env: fetch(:stage) do
-          execute :rake, 'db:drop'
+          execute :rails, 'db:drop'
         end
       end
     end
@@ -54,8 +54,8 @@ namespace :deploy do
     on roles(:db) do
       within release_path do
         with rails_env: fetch(:stage) do
-          execute :rake, 'db:schema:load'
-          execute :rake, 'db:seed'
+          execute :rails, 'db:schema:load'
+          execute :rails, 'db:seed'
         end
       end
     end
@@ -65,7 +65,7 @@ namespace :deploy do
     on roles(:db) do
       within release_path do
         with rails_env: fetch(:stage) do
-          execute :rake, 'db:seed'
+          execute :rails, 'db:seed'
         end
       end
     end

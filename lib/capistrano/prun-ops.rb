@@ -23,3 +23,7 @@ def bastion(host, user:)
   ssh_command = "ssh -W %h:%p -o StrictHostKeyChecking=no #{user}@#{host}"
   set :ssh_options, proxy: Net::SSH::Proxy::Command.new(ssh_command)
 end
+
+def apt_nointeractive
+  'sudo DEBIAN_FRONTEND=noninteractive apt-get install -y'
+end

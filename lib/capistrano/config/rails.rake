@@ -2,14 +2,12 @@ namespace :rails do
   task :prepare do
     on roles :all do
       execute <<-EOBLOCK
+        source "/etc/profile.d/rvm.sh"
         echo gem: --no-ri --no-rdoc | sudo tee -a /etc/gemrc
-        sudo gem install bundler
-        sudo gem install rack -v 1.6.0
-        sudo gem install thin -v 1.6.3
-        sudo thin install
-        sudo /usr/sbin/update-rc.d -f thin defaults
+        gem install bundler
+        gem install rack #-v 1.6.0
       EOBLOCK
-      execute 'sudo apt-get install -y imagemagick libmagickwand-dev'
+      execute "#{apt_nointeractive} imagemagick libmagickwand-dev"
 
       execute <<-EOBLOCK
         sudo mkdir -p /var/www/#{fetch :application}

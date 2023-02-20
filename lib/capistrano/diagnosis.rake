@@ -29,14 +29,14 @@ desc 'Tails the environment log or the log passed as argument: cap log_tail[thin
 task :log_tail, :file do |task, args|
   on roles(:app) do
     file = args[:file]? args[:file] : "*"
-    execute "tail -f #{shared_path}/log/#{file} | grep -vE \"(^\s*$|asset|Render)\""
+    execute "tail -f #{current_path}/log/#{file} | grep -vE \"(^\s*$|asset|Render)\""
   end
 end
 
 desc 'Search for a pattern in logs'
 task :log_pattern, :pattern do |task, args|
   on roles(:app) do
-    execute "cat #{shared_path}/log/* | grep -A 10 -B 5 '#{args[:pattern]}'"
+    execute "cat #{current_path}/log/* | grep -A 10 -B 5 '#{args[:pattern]}'"
   end
 end
 

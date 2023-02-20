@@ -7,7 +7,7 @@ namespace :nodejs do
         export NVM_DIR="$HOME/.nvm"
         [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
         nvm install node
-        npm install -g bower
+        npm install --global yarn
       EOBLOCK
     end
   end

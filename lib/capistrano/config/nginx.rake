@@ -1,7 +1,7 @@
 namespace :nginx do
   task :install do
     on roles :web, :api do
-      execute 'sudo apt-get install -y nginx'
+      execute "#{apt_nointeractive} nginx"
       execute 'sudo sed -i "s/# server_names_hash_bucket_size 64/server_names_hash_bucket_size 64/" /etc/nginx/nginx.conf'
       template 'vhost.conf', '/etc/nginx/conf.d/vhost.conf'
 
