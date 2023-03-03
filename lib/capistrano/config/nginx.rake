@@ -13,12 +13,9 @@ namespace :nginx do
     on roles(:web, :api) do |host|
       run_locally do
         run_in host, <<-EOBLOCK
-          sudo cd /usr/local/sbin
-          sudo wget https://dl.eff.org/certbot-auto
-          sudo chmod a+x /usr/local/sbin/certbot-auto
-          sudo mkdir /var/www/#{fetch :application}/current/public/.well-known
-          sudo certbot-auto certonly -a webroot --webroot-path=/var/www/#{fetch :application}/current/public -d #{host.hostname}
-          sudo openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
+          sudo snap install --classic certbot
+          sudo ln -s /snap/bin/certbot /usr/bin/certbot
+          sudo certbot --nginx -m admin@#{host.hostname} --non-interactive --agree-tos --domains #{host.hostname}
         EOBLOCK
       end
     end

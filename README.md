@@ -84,8 +84,8 @@ Secondary tasks:
 - `cap [stg] redis:install` install redis server
 - `cap [stg] app:prepare`(DEPRECATED) create init scripts
 - `cap [stg] app:db_prepare`(DEPRECATED) database first load
-- `cap [stg] nginx:cert` create SSL certificates with [Let's Encrypt](https://letsencrypt.org/)
-- `cap [stg] nginx:ssl` configure nginx with SSL certificates
+- `cap [stg] nginx:cert` create SSL certificates with [Let's Encrypt](https://letsencrypt.org/) and confiture nginx
+- `cap [stg] nginx:ssl`(DEPRECATED) configure nginx with SSL certificates
 
 Considerations:
 - 
