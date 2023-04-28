@@ -49,6 +49,28 @@ Dir.glob('lib/capistrano/tasks/*.rake').each { |r| import r }
 Dir.glob('lib/capistrano/tasks/*.cap').each { |r| import r }
 ```
 
+In order to configure RVM and PUMA you have here the params:
+
+```ruby
+set :rvm_ruby_version, "ruby-3.2.2"
+set :rvm_custom_path, "/usr/share/rvm"
+
+
+#PUMA:
+# Run 'cap production puma:systemd:config' to setup teh linux service
+
+# set :puma_threads, [4, 16]
+# set :puma_workers, 0
+set :puma_service_unit_type, "notify"
+set :puma_access_log, "#{release_path}/log/puma.access.log"
+set :puma_error_log, "#{release_path}/log/puma.error.log"
+set :puma_bind, "tcp://0.0.0.0:3001"
+# set :puma_conf, "#{shared_path}/puma.rb"
+# set :puma_state, "#{shared_path}/tmp/pids/puma.state"
+# set :puma_pid, "#{shared_path}/tmp/pids/puma.pid"
+# set :puma_preload_app, true
+```
+
 Notice that you are adding all prun-ops tasks with the line `require 'capistrano/prun-ops'`
 
 Your config/deploy/production.rb:
