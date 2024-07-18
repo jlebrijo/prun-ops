@@ -25,7 +25,7 @@ namespace :postgres do
       execute <<-EOBLOCK
         sudo sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/" /etc/postgresql/#{version}/main/postgresql.conf
         sudo sed -i "s/local   all             all                                     peer/local   all             all                                     md5/" /etc/postgresql/#{version}/main/pg_hba.conf
-        sudo sed -i "s/host    all             all             127.0.0.1/32            md5/host    all             all             all                     md5/" /etc/postgresql/#{version}/main/pg_hba.conf
+        sudo sed -i "s/host    all             all             127.0.0.1/32            scram-sha-256/host    all             all             all                     scram-sha-256/" /etc/postgresql/#{version}/main/pg_hba.conf
         sudo sed -i "s/ssl = on/ssl = off/" /etc/postgresql/#{version}/main/postgresql.conf
         sudo service postgresql restart
       EOBLOCK
@@ -36,6 +36,8 @@ namespace :postgres do
       EOBLOCK
       execute <<-EOBLOCK
         sudo -u postgres psql -c "create database #{database};"
+        sudo -u postgres psql -c "grant all privileges on database #{database} to #{username};"
+        sudo -u postgres psql -c "alter user #{username} with superuser;"
       EOBLOCK
 
       invoke 'postgres:restart'

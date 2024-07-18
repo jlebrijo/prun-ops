@@ -9,7 +9,7 @@ def template(template_name, target_path)
     file = File.read("lib/capistrano/config/templates/#{template_name}.erb")
   end
 
-  template = ERB.new file, nil, "%"
+  template = ERB.new file, nil, trim_mode: "%"
   rendered = template.result(binding)
   tmp_file = "/tmp/#{SecureRandom.hex}.#{template_name}"
   upload! StringIO.new(rendered), tmp_file

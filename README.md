@@ -64,7 +64,7 @@ set :rvm_custom_path, "/usr/share/rvm"
 set :puma_service_unit_type, "notify"
 set :puma_access_log, "#{release_path}/log/puma.access.log"
 set :puma_error_log, "#{release_path}/log/puma.error.log"
-set :puma_bind, "tcp://0.0.0.0:3001"
+set :puma_bind, "tcp://0.0.0.0:3000"
 # set :puma_conf, "#{shared_path}/puma.rb"
 # set :puma_state, "#{shared_path}/tmp/pids/puma.state"
 # set :puma_pid, "#{shared_path}/tmp/pids/puma.pid"
@@ -104,7 +104,7 @@ Secondary tasks:
 - `cap [stg] nginx:[start|stop|restart]` start/stop nginx
 - `cap [stg] nodejs:install` install node
 - `cap [stg] redis:install` install redis server
-- `cap [stg] app:prepare`(DEPRECATED) create init scripts
+- `cap [stg] puma:install` install puma server
 - `cap [stg] app:db_prepare`(DEPRECATED) database first load
 - `cap [stg] nginx:cert` create SSL certificates with [Let's Encrypt](https://letsencrypt.org/) and confiture nginx
 - `cap [stg] nginx:ssl`(DEPRECATED) configure nginx with SSL certificates
