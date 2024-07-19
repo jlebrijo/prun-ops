@@ -287,3 +287,7 @@ require 'capistrano/prun-ops'
 ### v0.2.8
 
 - Bastion command
+
+### v0.3.3
+
+- Including Cred to easy manage encrypted credentials
