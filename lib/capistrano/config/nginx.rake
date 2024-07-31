@@ -13,8 +13,8 @@ namespace :nginx do
     on roles(:web, :api) do |host|
       run_locally do
         run_in host, <<-EOBLOCK
-          sudo snap install --classic certbot
-          sudo ln -s /snap/bin/certbot /usr/bin/certbot
+          sudo apt update
+          sudo apt install certbot python3-certbot-nginx -y
           sudo certbot --nginx -m admin@#{host.hostname} --non-interactive --agree-tos --domains #{host.hostname}
         EOBLOCK
       end
@@ -23,6 +23,10 @@ namespace :nginx do
 
   task :ssl do
     on roles(:web, :api) do |host|
+      execute <<-EOBLOCK
+        cd /etc/ssl/certs
+        openssl dhparam -out dhparam.pem 4096
+      EOBLOCK
       template 'vhost_ssl.conf', '/etc/nginx/conf.d/vhost.conf'
       invoke 'nginx:restart'
     end
