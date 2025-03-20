@@ -16,17 +16,19 @@ namespace :ruby do
       sudo apt-get update
       #{apt_nointeractive} rvm
       sudo usermod -a -G rvm $USER
+      echo '[[ -s /usr/share/rvm/scripts/rvm ]] && source /usr/share/rvm/scripts/rvm' >> ~/.bashrc
       EOBLOCK
     end
   end
   task :install_rvm_project_version do
     ruby_version = File.read('.ruby-version').strip
+    ruby_version = ruby_version.start_with?('ruby-') ? ruby_version : "ruby-#{ruby_version}"
 
     on roles :all do
       execute <<-EOBLOCK
       source "/etc/profile.d/rvm.sh"
-      rvm install ruby-#{ruby_version}
-      rvm --default use ruby-#{ruby_version}
+      rvm install #{ruby_version}
+      rvm --default use #{ruby_version}
       EOBLOCK
     end
   end
