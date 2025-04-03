@@ -7,7 +7,6 @@ PATH
       capistrano-rvm
       capistrano3-puma
       newrelic_rpm
-      thin
 
 GEM
   remote: https://rubygems.org/
@@ -32,8 +31,6 @@ GEM
       capistrano-bundler
       puma (~> 3.4)
     concurrent-ruby (1.1.9)
-    daemons (1.4.1)
-    eventmachine (1.2.7)
     i18n (1.5.1)
       concurrent-ruby (~> 1.0)
     mutex_m (0.1.2)
@@ -44,17 +41,12 @@ GEM
     net-ssh (4.2.0)
     newrelic_rpm (8.2.0)
     puma (3.11.4)
-    rack (1.6.13)
     rake (10.3.2)
     sshkit (1.22.0)
       mutex_m
       net-scp (>= 1.1.2)
       net-sftp (>= 2.1.2)
       net-ssh (>= 2.8.0)
-    thin (1.8.2)
-      daemons (~> 1.0, >= 1.0.9)
-      eventmachine (~> 1.0, >= 1.0.4)
-      rack (>= 1, < 3)
 
 PLATFORMS
   ruby

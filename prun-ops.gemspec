@@ -24,6 +24,5 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'capistrano-rails'
   spec.add_runtime_dependency 'capistrano-rvm'
   spec.add_runtime_dependency 'capistrano3-puma'
-  spec.add_runtime_dependency 'thin'
   spec.add_runtime_dependency 'newrelic_rpm'
 end
