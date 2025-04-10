@@ -1,10 +1,12 @@
 desc 'SSH connection with server. If many servers are defined, you can pass a hostname part as argument: cap ssh[hostname]'
-task :ssh, :hostname do |task, args|
-  on roles(:app) do |host|
-    puts args[:hostname]
+task :ssh, :hostname do |_task, args|
+  server = roles(:app).select do |s|
+    args[:hostname].nil? || (!args[:hostname].nil? && s.hostname.include?(args[:hostname]))
+  end
+  on server do |host|
     run_locally do
-      run_in host, ""
-    end if args[:hostname].nil? || (!args[:hostname].nil? && host.hostname.include?(args[:hostname]))
+      run_in host, ''
+    end
   end
 end
 
