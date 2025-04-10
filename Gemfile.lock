@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    prun-ops (0.3.8)
+    prun-ops (0.3.9)
       capistrano
       capistrano-rails
       capistrano-rvm
