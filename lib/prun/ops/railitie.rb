@@ -1,4 +1,4 @@
-require 'prun-ops'
+require 'prun/ops'
 require 'rails'
 module PrunOps
   class Railtie < Rails::Railtie

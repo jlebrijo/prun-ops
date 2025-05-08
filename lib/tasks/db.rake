@@ -25,13 +25,18 @@ namespace :db do
 end
 
 task :get_db_config do
-  config   = Rails.configuration.database_configuration
-  @host = config[Rails.env]["host"]
-  @port = config[Rails.env]["port"]
-  @database = config[Rails.env]["database"]
-  @username = config[Rails.env]["username"]
-  @password = config[Rails.env]["password"]
-  @url = config[Rails.env]["url"]
+  config   = if Rails.env.production?
+               Rails.configuration.database_configuration[Rails.env]['primary']
+             else
+                Rails.configuration.database_configuration[Rails.env]
+             end
+
+  @host = config["host"]
+  @port = config["port"]
+  @database = config["database"]
+  @username = config["username"]
+  @password = config["password"]
+  @url = config["url"]
 
   @default_filename = "tmp/db.sql"
 end
