@@ -44,7 +44,7 @@ require "capistrano/puma"
 install_plugin Capistrano::Puma  # Default puma tasks
 install_plugin Capistrano::Puma::Systemd
 require "#{File.dirname(__FILE__)}/config/application"
-require 'capistrano/prun-ops'
+require 'capistrano/prun_ops'
 Dir.glob('lib/capistrano/tasks/*.rake').each { |r| import r }
 Dir.glob('lib/capistrano/tasks/*.cap').each { |r| import r }
 ```
@@ -52,7 +52,7 @@ Dir.glob('lib/capistrano/tasks/*.cap').each { |r| import r }
 In order to configure RVM and PUMA you have here the params:
 
 ```ruby
-set :rvm_ruby_version, "ruby-3.2.2"
+set :rvm_ruby_version, File.read(".ruby-version").strip
 set :rvm_custom_path, "/usr/share/rvm"
 
 
@@ -71,7 +71,7 @@ set :puma_bind, "tcp://0.0.0.0:3000"
 # set :puma_preload_app, true
 ```
 
-Notice that you are adding all prun-ops tasks with the line `require 'capistrano/prun-ops'`
+Notice that you are adding all prun-ops tasks with the line `require 'capistrano/prun_ops'`
 
 Your config/deploy/production.rb:
 
@@ -97,7 +97,7 @@ Secondary tasks:
 - `cap [stg] ruby:brightbox`(DEPRECATED) install ruby on .ruby-version version from brightbox
 - `cap [stg] ruby:rvm` install ruby version manager
 - `cap [stg] ruby:install_rvm_project_version` installs ruby version in .ruby-version file of the project
-- `cap [stg] rails:prepare` install rails dependencies
+- `cap [stg] rails:prepare`(DEPRECATED)  install rails dependencies
 - `cap [stg] postgres:install` install and configure postgres
 - `cap [stg] postgres:[start|stop|restart]` start/stop postgres
 - `cap [stg] nginx:install` install and configure nginx
