@@ -44,6 +44,9 @@ end
 
 def filename
   name = ARGV[1]
-  task name.to_sym do; end unless name.nil?
+  unless name.nil?
+    task name.to_sym do
+    end
+  end
   name || @default_filename
 end

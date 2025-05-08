@@ -25,7 +25,7 @@ namespace :ruby do
   end
   task :install_rvm_project_version do
     ruby_version = File.read(".ruby-version").strip
-    ruby_version = ruby_version.start_with?("ruby-") ? ruby_version : "ruby-#{ruby_version}"
+    ruby_version = "ruby-#{ruby_version}" unless ruby_version.start_with?("ruby-")
 
     on roles :all do
       execute <<-EOBLOCK

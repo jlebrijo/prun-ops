@@ -29,10 +29,10 @@ task backup: ["db:backup", :get_config] do
   # Pushing data
   comment = "#{@app_name} backup at #{Time.now.strftime "%F %R"}"
   sh "git add --all && git commit -m '#{comment}'" do |ok, _res|
-    if !ok
-      puts "Nothing change since last backup"
-    else
+    if ok
       sh "git push origin master"
+    else
+      puts "Nothing change since last backup"
     end
   end
 
@@ -60,7 +60,10 @@ end
 
 def tag
   name = ARGV[1]
-  task name.to_sym do; end unless name.nil?
+  unless name.nil?
+    task name.to_sym do
+    end
+  end
   name
 end
 
