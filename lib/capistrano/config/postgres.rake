@@ -2,10 +2,7 @@ namespace :postgres do
   task :install do
     stage = fetch(:stage).to_s
     config   = Rails.configuration.database_configuration
-    version = config[stage]["version"]
-    username = config[stage]["username"]
-    password = config[stage]["password"]
-    database = config[stage]["database"]
+    version = config["default"]["version"]
 
     on roles :all do
       execute <<-EOBLOCK
