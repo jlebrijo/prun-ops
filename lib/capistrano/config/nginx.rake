@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 namespace :nginx do
   task :install do
     on roles :web, :api do
       execute "#{apt_nointeractive} nginx"
       execute 'sudo sed -i "s/# server_names_hash_bucket_size 64/server_names_hash_bucket_size 64/" /etc/nginx/nginx.conf'
-      template 'vhost.conf', '/etc/nginx/conf.d/vhost.conf'
+      template "vhost.conf", "/etc/nginx/conf.d/vhost.conf"
 
-      invoke 'nginx:restart'
+      invoke "nginx:restart"
     end
   end
 
@@ -22,17 +24,17 @@ namespace :nginx do
   end
 
   task :ssl do
-    on roles(:web, :api) do |host|
+    on roles(:web, :api) do |_host|
       execute <<-EOBLOCK
         cd /etc/ssl/certs
         openssl dhparam -out dhparam.pem 4096
       EOBLOCK
-      template 'vhost_ssl.conf', '/etc/nginx/conf.d/vhost.conf'
-      invoke 'nginx:restart'
+      template "vhost_ssl.conf", "/etc/nginx/conf.d/vhost.conf"
+      invoke "nginx:restart"
     end
   end
 
-  %w(start stop restart status).each do |action|
+  %w[start stop restart status].each do |action|
     desc "Nginx"
     task :"#{action}" do
       on roles(:web, :api) do

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :redis do
   task :install do
     on roles :app do

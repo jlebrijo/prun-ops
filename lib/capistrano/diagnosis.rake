@@ -1,16 +1,18 @@
-desc 'SSH connection with server. If many servers are defined, you can pass a hostname part as argument: cap ssh[hostname]'
+# frozen_string_literal: true
+
+desc "SSH connection with server. If many servers are defined, you can pass a hostname part as argument: cap ssh[hostname]"
 task :ssh, :hostname do |_task, args|
   server = roles(:app).select do |s|
     args[:hostname].nil? || (!args[:hostname].nil? && s.hostname.include?(args[:hostname]))
   end
   on server do |host|
     run_locally do
-      run_in host, ''
+      run_in host, ""
     end
   end
 end
 
-desc 'Opens a remote Rails console'
+desc "Opens a remote Rails console"
 task :c do
   on roles(:app) do |host|
     run_locally do
@@ -19,7 +21,7 @@ task :c do
   end
 end
 
-desc 'Opens a remote Database console'
+desc "Opens a remote Database console"
 task :dbconsole do
   on roles(:app) do |host|
     run_locally do
@@ -28,23 +30,23 @@ task :dbconsole do
   end
 end
 
-desc 'Tails the environment log or the log passed as argument: cap log_tail[thin.3000.log]'
-task :log_tail, :file do |task, args|
+desc "Tails the environment log or the log passed as argument: cap log_tail[thin.3000.log]"
+task :log_tail, :file do |_task, args|
   on roles(:app) do
-    file = args[:file]? args[:file] : "*"
+    file = args[:file] || "*"
     execute "tail -f #{current_path}/log/#{file} | grep -vE \"(^\s*$|asset|Render)\""
   end
 end
 
-desc 'Search for a pattern in logs'
-task :log_pattern, :pattern do |task, args|
+desc "Search for a pattern in logs"
+task :log_pattern, :pattern do |_task, args|
   on roles(:app) do
     execute "cat #{current_path}/log/* | grep -A 10 -B 5 '#{args[:pattern]}'"
   end
 end
 
 desc "Runs a command in server: cap production x['free -m']"
-task :x, :command do |task, args|
+task :x, :command do |_task, args|
   on roles(:app) do |host|
     run_locally do
       run_in host, args[:command]
@@ -52,19 +54,19 @@ task :x, :command do |task, args|
   end
 end
 
-desc 'Executes a rake task in server. i.e.: cap staging rake[db:version]'
-task :rake, :remote_task do |task, args|
+desc "Executes a rake task in server. i.e.: cap staging rake[db:version]"
+task :rake, :remote_task do |_task, args|
   on roles(:app) do
     within release_path do
       with rails_env: fetch(:stage) do
-        execute :rake, "#{args[:remote_task]}"
+        execute :rake, args[:remote_task].to_s
       end
     end
   end
 end
 
-desc 'Uploads a file to /tmp folder. i.e.: cap staging upload[tmp/db.sql]'
-task :upload, :file_path do |task, args|
+desc "Uploads a file to /tmp folder. i.e.: cap staging upload[tmp/db.sql]"
+task :upload, :file_path do |_task, args|
   on roles(:app) do |host|
     run_locally do
       upload_scp host, args[:file_path]
@@ -72,8 +74,8 @@ task :upload, :file_path do |task, args|
   end
 end
 
-desc 'Downloads a file. i.e.: cap staging download[/tmp/db.sql]'
-task :download, :file_path do |task, args|
+desc "Downloads a file. i.e.: cap staging download[/tmp/db.sql]"
+task :download, :file_path do |_task, args|
   on roles(:app) do |host|
     run_locally do
       download_scp host, args[:file_path]
@@ -81,16 +83,15 @@ task :download, :file_path do |task, args|
   end
 end
 
-
 def run_in(host, remote_cmd)
   cmd = %w[ssh]
   opts = fetch(:ssh_options)
   cmd << "-oProxyCommand='#{opts[:proxy].command_line_template}'" if opts
   cmd << "#{host.user}@#{host.hostname}"
-  cmd << "-p #{host.port || '22'}"
+  cmd << "-p #{host.port || "22"}"
   cmd << "-tt '#{remote_cmd}'"
 
-  command = cmd.join(' ')
+  command = cmd.join(" ")
   Rails.logger.info command
   exec command
 end
@@ -103,7 +104,7 @@ def upload_scp(host, file_path)
   cmd << file_path
   cmd << "#{host.user}@#{host.hostname}:/tmp"
 
-  command = cmd.join(' ')
+  command = cmd.join(" ")
   Rails.logger.info command
   exec command
 end
@@ -113,10 +114,9 @@ def download_scp(host, file_path)
   opts = fetch(:ssh_options)
   cmd << "-oProxyCommand='#{opts[:proxy].command_line_template}'" if opts
   cmd << "#{host.user}@#{host.hostname}:#{file_path}"
-  cmd << '.'
+  cmd << "."
 
-  command = cmd.join(' ')
+  command = cmd.join(" ")
   Rails.logger.info command
   exec command
 end
-

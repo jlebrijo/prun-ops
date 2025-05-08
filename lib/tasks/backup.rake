@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 namespace :backup do
-  desc 'Restore and database and :backup_dirs from the git :backup_repo, with the TAG given'
+  desc "Restore and database and :backup_dirs from the git :backup_repo, with the TAG given"
   task restore: :get_config do
     pull_repo(tag)
     sh "rake db:restore #{@backup_path}/db.sql"
@@ -11,7 +13,7 @@ namespace :backup do
   end
 end
 
-desc 'Commits and tag the database dump and :backup_dirs into a git :backup_repo'
+desc "Commits and tag the database dump and :backup_dirs into a git :backup_repo"
 task backup: ["db:backup", :get_config] do
   pull_repo
 
@@ -26,8 +28,8 @@ task backup: ["db:backup", :get_config] do
 
   # Pushing data
   comment = "#{@app_name} backup at #{Time.now.strftime "%F %R"}"
-  sh "git add --all && git commit -m '#{comment}'" do |ok, res|
-    if ! ok
+  sh "git add --all && git commit -m '#{comment}'" do |ok, _res|
+    if !ok
       puts "Nothing change since last backup"
     else
       sh "git push origin master"
@@ -36,7 +38,7 @@ task backup: ["db:backup", :get_config] do
 
   # Tagging
   tagname = if tag.blank?
-              "#{@app_name}-#{Date.today.strftime "%Y%m%d" }"
+              "#{@app_name}-#{Date.today.strftime "%Y%m%d"}"
             else
               tag
             end
@@ -58,17 +60,17 @@ end
 
 def tag
   name = ARGV[1]
-  task name.to_sym do ; end unless name.nil?
-  return name
+  task name.to_sym do; end unless name.nil?
+  name
 end
 
-def pull_repo(tag="")
+def pull_repo(tag = "")
   if File.directory?(@repo_path)
-    cd "#{@repo_path}"
+    cd @repo_path.to_s
     sh "git pull origin master"
   else
     sh "git clone #{@git_repo} #{@repo_path}"
-    cd "#{@repo_path}"
+    cd @repo_path.to_s
   end
   sh "git checkout tags/#{tag}" unless tag.blank?
 end

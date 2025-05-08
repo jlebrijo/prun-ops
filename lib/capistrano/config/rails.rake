@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :rails do
   task :prepare do
     on roles :all do
@@ -13,7 +15,6 @@ namespace :rails do
         sudo mkdir -p /var/www/#{fetch :application}
         sudo chown #{host.user}:#{host.user} /var/www/#{fetch :application}
       EOBLOCK
-
     end
   end
 end

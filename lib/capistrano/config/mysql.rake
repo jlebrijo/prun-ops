@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 namespace :mysql do
   task :install do
     on roles :db do
-      not_if 'which mysql' do
+      not_if "which mysql" do
         execute <<-EOBLOCK
           debconf-set-selections <<< 'mysql-server mysql-server/root_password password #{fetch :my_pass}'
           debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password #{fetch :my_pass}'
@@ -16,21 +18,19 @@ namespace :mysql do
         EOBLOCK
       end
 
-      invoke 'mysql:restart'
+      invoke "mysql:restart"
     end
   end
-
 
   task :test do
     on roles :db do
       not_if "echo ''" do
-        p 'executing ......'
+        p "executing ......"
       end
     end
   end
 
-
-  %w(start stop restart).each do |action|
+  %w[start stop restart].each do |action|
     desc "MySQL"
     task :"#{action}" do
       on roles(:app) do
@@ -41,9 +41,7 @@ namespace :mysql do
 end
 
 def not_if(command)
-  begin
-     yield unless execute command
-  rescue Exception
-    yield
-  end
+  yield unless execute command
+rescue Exception
+  yield
 end

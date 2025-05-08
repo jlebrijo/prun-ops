@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.authors = ["jlebrijo"]
   spec.email = ["jlebrijo@gmail.com"]
 
-  spec.summary       = %q{Encapsulates Deployment and Manteinance Operations commands needed for a Rails Application.}
-  spec.description   = %q{Encapsulates Operations commands for Rails Applications: Deploy, Diagnose, Monitoring, Version Releasing and Backup.}
+  spec.summary       = "Encapsulates Deployment and Manteinance Operations commands needed for a Rails Application."
+  spec.description   = "Encapsulates Operations commands for Rails Applications: Deploy, Diagnose, Monitoring, Version Releasing and Backup."
   spec.homepage      = "http://github.com/jlebrijo/prun-ops"
   spec.license       = "MIT"
   spec.required_ruby_version = ">= 3.1.0"
@@ -35,11 +35,11 @@ Gem::Specification.new do |spec|
 
   # Uncomment to register a new dependency of your gem
   # spec.add_dependency "example-gem", "~> 1.0"
-  spec.add_dependency 'capistrano'
-  spec.add_dependency 'capistrano-rails'
-  spec.add_dependency 'capistrano-rvm'
-  spec.add_dependency 'capistrano3-puma'
-  spec.add_dependency 'newrelic_rpm'
+  spec.add_dependency "capistrano"
+  spec.add_dependency "capistrano3-puma"
+  spec.add_dependency "capistrano-rails"
+  spec.add_dependency "capistrano-rvm"
+  spec.add_dependency "newrelic_rpm"
   # For more information and examples about making a new gem, check out our
   # guide at: https://bundler.io/guides/creating_gem.html
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :yarn do
   task :install do
     on roles :app do

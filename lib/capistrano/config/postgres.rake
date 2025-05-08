@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 namespace :postgres do
   task :install do
     stage = fetch(:stage).to_s
-    Rails.env = 'production'
-    config   = Rails.configuration.database_configuration
+    Rails.env = "production"
+    config = Rails.configuration.database_configuration
     version = config["default"]["version"]
 
     on roles :all do
@@ -35,18 +37,20 @@ namespace :postgres do
 
       ## Rewrite postgres password:
       if Rails.version.to_i >= 8
-        %w(primary cable queue cache).each do |db|
-          create_db(username: config[stage][db]["username"], password: config[stage][db]["password"], database: config[stage][db]["database"])
+        %w[primary cable queue cache].each do |db|
+          create_db(username: config[stage][db]["username"], password: config[stage][db]["password"],
+                    database: config[stage][db]["database"])
         end
       else
-        create_db(username: config[stage]["username"], password: config[stage]["password"], database: config[stage]["database"])
+        create_db(username: config[stage]["username"], password: config[stage]["password"],
+                  database: config[stage]["database"])
       end
 
-      invoke 'postgres:restart'
+      invoke "postgres:restart"
     end
   end
 
-  %w(start stop restart).each do |action|
+  %w[start stop restart].each do |action|
     desc "PostgreSQL"
     task :"#{action}" do
       on roles(:app) do
@@ -62,5 +66,5 @@ def create_db(username:, password:, database:)
             sudo -u postgres psql -c "create database #{database};"
             sudo -u postgres psql -c "grant all privileges on database #{database} to #{username};"
             sudo -u postgres psql -c "alter user #{username} with superuser;"
-          EOBLOCK
+  EOBLOCK
 end

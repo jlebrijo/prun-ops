@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 namespace :db do
   desc "Reset DataBase for environment and test"
   task :reset do
-    Rake::Task['db:drop'].invoke
-    Rake::Task['db:create'].invoke
-    Rake::Task['db:migrate'].invoke
-    Rake::Task['db:seed'].invoke
+    Rake::Task["db:drop"].invoke
+    Rake::Task["db:create"].invoke
+    Rake::Task["db:migrate"].invoke
+    Rake::Task["db:seed"].invoke
     sh "rake db:test:prepare"
   end
 
@@ -15,21 +17,20 @@ namespace :db do
     else
       sh "export PGPASSWORD=#{@password} && pg_dump #{@database} --host #{@host} --port #{@port} -U #{@username} -f #{@default_filename}"
     end
-
   end
 
   desc "Restore the database from tmp/db.sql file if no one is passed"
-  task restore: [:drop, :create, :get_db_config] do
+  task restore: %i[drop create get_db_config] do
     sh "export PGPASSWORD=#{@password} && psql -d #{@database} -U #{@username} -h #{@host} --port #{@port} < #{filename}"
   end
 end
 
 task :get_db_config do
-  config   = if Rails.env.production?
-               Rails.configuration.database_configuration[Rails.env]['primary']
-             else
-                Rails.configuration.database_configuration[Rails.env]
-             end
+  config = if Rails.env.production?
+             Rails.configuration.database_configuration[Rails.env]["primary"]
+           else
+             Rails.configuration.database_configuration[Rails.env]
+           end
 
   @host = config["host"]
   @port = config["port"]
@@ -43,9 +44,6 @@ end
 
 def filename
   name = ARGV[1]
-  task name.to_sym do ; end unless name.nil?
-  return name ? name : @default_filename
+  task name.to_sym do; end unless name.nil?
+  name || @default_filename
 end
-
-
-

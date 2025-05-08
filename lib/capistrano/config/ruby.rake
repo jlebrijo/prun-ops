@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 namespace :ruby do
   task :brightbox do
-    ruby_version = File.read('.ruby-version').strip[/\Aruby-(.*)\.\d\Z/,1]
+    ruby_version = File.read(".ruby-version").strip[/\Aruby-(.*)\.\d\Z/, 1]
     on roles :all do
       execute <<-EOBLOCK
         sudo apt-add-repository -y ppa:brightbox/ruby-ng
@@ -22,8 +24,8 @@ namespace :ruby do
     end
   end
   task :install_rvm_project_version do
-    ruby_version = File.read('.ruby-version').strip
-    ruby_version = ruby_version.start_with?('ruby-') ? ruby_version : "ruby-#{ruby_version}"
+    ruby_version = File.read(".ruby-version").strip
+    ruby_version = ruby_version.start_with?("ruby-") ? ruby_version : "ruby-#{ruby_version}"
 
     on roles :all do
       execute <<-EOBLOCK
@@ -33,5 +35,4 @@ namespace :ruby do
       EOBLOCK
     end
   end
-
 end

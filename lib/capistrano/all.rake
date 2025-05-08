@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 if defined?(Rails) && Rails.application.config.respond_to?(:backup_dirs)
   set :backup_dirs, Rails.application.config.backup_dirs
@@ -6,8 +7,7 @@ else
 end
 
 namespace :deploy do
-
-  %w(start stop restart).each do |action|
+  %w[start stop restart].each do |action|
     desc "#{action.capitalize} application"
     task :"#{action}" do
       on roles(:app) do
@@ -19,53 +19,53 @@ namespace :deploy do
   task :upload_linked_files do
     on roles :app do
       shared = "/var/www/#{fetch :application}/shared"
-      fetch(:linked_files).each do |f|
+      fetch(:linked_files)&.each do |f|
         execute "mkdir -p #{shared}/#{File.dirname f}"
         upload! f, "#{shared}/#{f}"
-      end if fetch(:linked_files)
+      end
     end
   end
 
   after :publishing, :upload_linked_files
   # after :publishing, :restart
 
-  desc 'Create database'
+  desc "Create database"
   task :db_create do
     on roles(:db) do
       within release_path do
         with rails_env: fetch(:stage) do
-          execute :rails, 'db:create'
+          execute :rails, "db:create"
         end
       end
     end
   end
-  desc 'Create drop'
+  desc "Create drop"
   task :db_drop do
     on roles(:db) do
       within release_path do
         with rails_env: fetch(:stage) do
-          execute :rails, 'db:drop'
+          execute :rails, "db:drop"
         end
       end
     end
   end
-  desc 'Setup database'
+  desc "Setup database"
   task :db_reset do
     on roles(:db) do
       within release_path do
         with rails_env: fetch(:stage) do
-          execute :rails, 'db:schema:load'
-          execute :rails, 'db:seed'
+          execute :rails, "db:schema:load"
+          execute :rails, "db:seed"
         end
       end
     end
   end
-  desc 'Seed database'
+  desc "Seed database"
   task :db_seed do
     on roles(:db) do
       within release_path do
         with rails_env: fetch(:stage) do
-          execute :rails, 'db:seed'
+          execute :rails, "db:seed"
         end
       end
     end

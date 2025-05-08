@@ -1,5 +1,7 @@
-require 'prun/ops'
-require 'rails'
+# frozen_string_literal: true
+
+require "prun/ops"
+require "rails"
 module PrunOps
   class Railtie < Rails::Railtie
     rake_tasks do

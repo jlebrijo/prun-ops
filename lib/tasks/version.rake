@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 desc "Version control"
 namespace :version do
   desc "Release a version: rake version:release version_tag"
-  task :release, :number do  |t, args|
+  task :release, :number do |_t, _args|
     version_tag = get_version_tag
     # Merge dev/master and push
-    sh "git show-branch dev" do |ok, res|
+    sh "git show-branch dev" do |ok, _res|
       if ok
         sh "git checkout master && git merge dev && git push && git checkout dev"
       else
@@ -18,7 +20,7 @@ namespace :version do
   end
 
   desc "Delete a version: rake version:remove version_tag "
-  task :remove, :number do  |t, args|
+  task :remove, :number do |_t, _args|
     version_tag = get_version_tag
     sh "git tag -d #{version_tag}"
     sh "git push origin :refs/tags/#{version_tag}"
@@ -32,5 +34,4 @@ namespace :version do
       ARGV[1]
     end
   end
-
 end
