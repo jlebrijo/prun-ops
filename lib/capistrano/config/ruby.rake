@@ -16,7 +16,8 @@ namespace :ruby do
       sudo apt-get update
       #{apt_nointeractive} rvm
       sudo usermod -a -G rvm $USER
-      echo '[[ -s /usr/share/rvm/scripts/rvm ]] && source /usr/share/rvm/scripts/rvm' >> ~/.bashrc
+      cp ~/.bashrc ~/.bashrc.bak
+      { echo '[[ -s /usr/share/rvm/scripts/rvm ]] && source /usr/share/rvm/scripts/rvm'; cat ~/.bashrc.bak; } > ~/.bashrc
       EOBLOCK
     end
   end
