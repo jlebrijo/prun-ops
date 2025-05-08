@@ -10,7 +10,7 @@ namespace :postgres do
     on roles :all do
       execute <<-EOBLOCK
           sudo apt install -y postgresql-common
-          sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh
+          sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh yes
           sudo apt-get update
           sudo export LANGUAGE=en_US.UTF-8
           #{apt_nointeractive} postgresql-client-#{version} libpq-dev
