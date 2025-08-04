@@ -38,7 +38,7 @@ class SslCertificate
   end
 
   def create_credentials_file
-    File.write(CREDENTIALS_PATH, "dns_#{DNS_PROVIDER}_api_token=#{Cred[:digitalocean_api_token]}")
+    File.write(CREDENTIALS_PATH, "dns_#{DNS_PROVIDER}_api_token=#{Cred[:dns_digitalocean_token]}")
     File.chmod(0o600, CREDENTIALS_PATH)
     Rails.logger.info "SSL::Credentials file created at #{CREDENTIALS_PATH}."
   end
