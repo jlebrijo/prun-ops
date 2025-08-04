@@ -2,6 +2,7 @@
 
 require_relative "ops/version"
 require_relative "cred"
+require_relative "ssl_certificate"
 
 module Prun
   module Ops
