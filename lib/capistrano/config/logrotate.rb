@@ -5,7 +5,7 @@ namespace :logrotate do
     on roles :all do
       command "#{apt_nointeractive} logrotate ncdu"
       script = <<-TEXT
-        /var/www/mx/shared/log/*.log {
+        /var/www/#{fetch :application}/shared/log/*.log {
           daily
           missingok
           rotate 7
