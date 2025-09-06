@@ -27,7 +27,7 @@ namespace :nginx do
     on roles(:web, :api) do |_host|
       execute <<-EOBLOCK
         cd /etc/ssl/certs
-        openssl dhparam -out dhparam.pem 4096
+        openssl dhparam -dsaparam -out dhparam.pem 2048
       EOBLOCK
       template "vhost_ssl.conf", "/etc/nginx/conf.d/vhost.conf"
       invoke "nginx:restart"
