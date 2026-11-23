@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 
+set :default_env, fetch(:default_env, {}).merge(
+  node_env: "production",
+  skip_yarn_install: "1"
+)
+
 namespace :yarn do
   task :install do
     on roles :app do
