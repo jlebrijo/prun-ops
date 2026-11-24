@@ -102,7 +102,7 @@ Secondary tasks:
 - `cap [stg] postgres:[start|stop|restart]` start/stop postgres
 - `cap [stg] nginx:install` install and configure nginx
 - `cap [stg] nginx:[start|stop|restart]` start/stop nginx
-- `cap [stg] nodejs:install` install node
+- `cap [stg] nodejs:install` install node (version from `.node-version`, latest if missing)
 - `cap [stg] redis:install` install redis server
 - `cap [stg] puma:install` install puma server
 - `cap [stg] app:db_prepare`(DEPRECATED) database first load
