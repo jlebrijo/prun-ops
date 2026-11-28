@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "ops/version"
+require_relative "app"
 require_relative "cred"
 require_relative "ssl_certificate"
 
